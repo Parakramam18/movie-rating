@@ -1,0 +1,33 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: movie-rating
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: movie-rating
+    spec:
+      containers:
+        - name: movie-rating
+          image: gcr.io/govindacloud09072019/movie-rating
+          ports:
+            - containerPort: 9092
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: movie-rating
+  labels:
+    name: movie-rating
+spec:
+  ports:
+    - port: 9092
+      targetPort: 9092
+      protocol: TCP
+  selector:
+    app: springboot-rest-gcp
+  type: LoadBalancer
